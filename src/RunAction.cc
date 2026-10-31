@@ -82,10 +82,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
   // histograms
   //
+  // Always open the file: IsActive() only considers histograms, and without
+  // OpenFile() the ntuple manager does not exist, so filling ntuples crashes.
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if (analysisManager->IsActive()) {
-    analysisManager->OpenFile();
-  }
+  analysisManager->OpenFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,10 +96,8 @@ void RunAction::EndOfRunAction(const G4Run*)
 
   // save histograms
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if (analysisManager->IsActive()) {
-    analysisManager->Write();
-    analysisManager->CloseFile();
-  }
+  analysisManager->Write();
+  analysisManager->CloseFile();
 
   // show Rndm status
   if (isMaster) G4Random::showEngineStatus();
