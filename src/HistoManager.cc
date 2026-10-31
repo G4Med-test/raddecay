@@ -46,9 +46,8 @@ void HistoManager::Book()
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
 
   analysis->SetDefaultFileType("root");
-#ifdef G4MULTITHREADED
-  analysis->SetNtupleMerging(true);
-#endif
+  // No ntuple merging: in Geant4 11.3 G4RootMainNtupleManager::Merge() crashes
+  // when an active ntuple follows an inactive one (e.g. only ntuple 3 active).
   analysis->SetFileName(fFileName);
   analysis->SetVerboseLevel(1);
   analysis->SetActivation(true);  // enable activation of histos, nTuples
